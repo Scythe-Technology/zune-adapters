@@ -1,0 +1,6 @@
+{
+    "aliases": {
+        "lune": "./",
+        "intern": "../intern"
+    }
+}
