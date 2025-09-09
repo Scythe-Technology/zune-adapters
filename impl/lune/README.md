@@ -46,4 +46,4 @@ Extra unexpected features can occur in this adapter, such as extra compression f
 | serde | `91.66%` (5.5/6) | missing `brotli` |
 | process | ✅ | |
 | roblox | ❌️ | WIP, [luau-roblox](https://github.com/Scythe-Technology/luau-roblox) can be used here (no XML) |
-| datetime | `%93.75` (15/16) | unsupported `locale` parameter |
+| datetime | ✅ | |

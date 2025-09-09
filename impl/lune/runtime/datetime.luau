@@ -147,10 +147,7 @@ end
 	@return string -- The formatting string
 ]=]
 function DateTime.formatLocalTime(self: LuneDateTime, formatString: string?, locale: Locale?): string
-	if locale and locale ~= "en" then
-		error("currently does not support locales other than 'en'")
-	end
-	return self.__internal:formatLocalTime(formatString or "%Y-%m-%d %H:%M:%S")
+	return require("@intern/locale").toLocale(self.__internal:formatLocalTime(formatString or "%Y-%m-%d %H:%M:%S"), locale)
 end
 
 --[=[
@@ -182,10 +179,7 @@ end
 	@return string -- The formatting string
 ]=]
 function DateTime.formatUniversalTime(self: LuneDateTime, formatString: string?, locale: Locale?): string
-	if locale and locale ~= "en" then
-		error("currently does not support locales other than 'en'")
-	end
-	return self.__internal:formatUniversalTime(formatString or "%Y-%m-%d %H:%M:%S")
+	return require("@intern/locale").toLocale(self.__internal:formatUniversalTime(formatString or "%Y-%m-%d %H:%M:%S"), locale)
 end
 
 --[=[
