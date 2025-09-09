@@ -16,6 +16,8 @@
 ## **Notes**
 `zune`'s task scheduler may behave differently than the `lute`'s task scheduler, which may lead to some differences in behavior when using tasks/async related API in this `lute` adapter.
 
+Usage errors also would not be the same as `lute`, stack traces, error messages, may differ when running code.
+
 ## **Compatability**
 | status | defintion |
 |--------|-----------|

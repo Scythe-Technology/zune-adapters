@@ -15,6 +15,9 @@
 ## **Notes**
 `zune`'s task scheduler may behave differently than the `lune`'s task scheduler, which may lead to some differences in behavior when using tasks/async related API in this `lune` adapter.
 
+Usage errors also would not be the same as `lune`, stack traces, error messages, may differ when running code.
+- Some errors are converted to match `lune` but not all cases are handled.
+
 `lune`/`mlua`'s limitations would not apply to this adapter, and most likely will not copy limitations.
 - For example maximum number of threads, maximum number of tasks, etc.
 
@@ -37,4 +40,4 @@
 | serde | `91.66%` (5.5/6) | missing `brotli` |
 | process | ✅ | |
 | roblox | ❌️ | WIP, [luau-roblox](https://github.com/Scythe-Technology/luau-roblox) can be used here (no XML) |
-| datetime | ✅ | |
+| datetime | `%93.75` (15/16) | unsupported `locale` parameter |
