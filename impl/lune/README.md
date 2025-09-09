@@ -43,7 +43,7 @@ Extra unexpected features can occur in this adapter, such as extra compression f
 | task | ✅ | |
 | stdio | ✅ | |
 | regex | ✅ | |
-| serde | `91.66%` (5.5/6) | missing `brotli` |
+| serde | ✅ | |
 | process | ✅ | |
 | roblox | ❌️ | WIP, [luau-roblox](https://github.com/Scythe-Technology/luau-roblox) can be used here (no XML) |
 | datetime | ✅ | |
