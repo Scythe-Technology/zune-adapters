@@ -19,3 +19,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+This project includes third-party components with the following licenses:
+
+| Project | License |
+|---------|---------|
+| lune    | [MPL-2.0](https://github.com/lune-org/lune/blob/6b2c364bf4d3b22034baa2617945cc5aae55cdd2/LICENSE.txt) |
+| lute    | [MIT](https://github.com/luau-lang/lute/blob/99bd39409b3ebf878a2d6e2ad2c1fb19c6b17d52/LICENSE) |
+| seal    | [MIT](https://github.com/deviaze/seal) |
