@@ -6,6 +6,8 @@ A repository containing runtime adapters to run with [zune](https://github.com/S
 
 The goal for the **adapters** is to implement a zune equivalent of the runtime's API.
 
+Bugs and issues while using the adapters, should be reported here, and not to any runtime.
+
 | runtime adapters |
 |------------------|
 | [lune](./impl/lune/README.md) |

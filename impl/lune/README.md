@@ -18,6 +18,12 @@
 Usage errors also would not be the same as `lune`, stack traces, error messages, may differ when running code.
 - Some errors are converted to match `lune` but not all cases are handled.
 
+When using `type`/`typeof` on known `lune` userdata, this adapter would not likely not return any unique type names because the implementations are table based, mocking the properties, methods, and metamethods of the original userdata type. If you need exact unique type names as how `lune` has it, you would most likely need to override the `type`/`typeof` global.
+
+Extra unexpected features can occur in this adapter, such as extra compression format that does not exist in `lune` but exists in `zune`, or other features that are not present in `lune` but are present in `zune`. These features would not be documented in this adapter's documentation, and could be considered as an extension of the original `lune` API.
+- For example, more `HashAlgorithm` options, like `"sha3_shake128"`. Undocumented in `adapter` types, but available at runtime.
+- Second example, more `EncodeDecodeFormat` and `CompressDecompressFormat` options, like `"base64"` and `"flate"`. Undocumented in `adapter` types, but available at runtime.
+
 `lune`/`mlua`'s limitations would not apply to this adapter, and most likely will not copy limitations.
 - For example maximum number of threads, maximum number of tasks, etc.
 
