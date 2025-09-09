@@ -131,8 +131,9 @@ function luau.load(source: string, loadOptions: LoadOptions?): (...any) -> ...an
 	if version ~= 0 and (version < 3 or version > 6) then
 		bytecode = zune.luau.compile(source, {})
 	end
+	local injectGlobals = if (loadOptions and loadOptions.injectGlobals ~= nil) then loadOptions.injectGlobals else true
 	local custom_env = if (loadOptions and loadOptions.environment) then loadOptions.environment else nil
-	if (loadOptions and loadOptions.environment and loadOptions.injectGlobals) then
+	if (loadOptions and loadOptions.environment and injectGlobals) then
 		custom_env = setmetatable(custom_env, { __index = _G })
 	end
 	return zune.luau.load(bytecode, {
