@@ -1,6 +1,6 @@
 # Adapter for Lune
 
-**Lune**: `0.10.5`
+**Lune**: `0.10.2`
 
 **.luaurc**:
 ```json
