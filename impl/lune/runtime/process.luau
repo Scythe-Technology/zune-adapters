@@ -18,8 +18,8 @@ export type Endianness = "big" | "little"
 export type ExecStdioKind = "default" | "inherit" | "forward" | "none"
 local KIND_MAP = {
 	default = "pipe",
+	forward = "pipe",
 	inherit = "inherit",
-	forward = "inherit",
 	none = "ignore",
 }
 
@@ -411,36 +411,68 @@ end
 	@return A dictionary representing the result of the child process
 ]=]
 function process.exec(program: string, params: { string }?, options: ExecOptions?): ExecResult
-	if options and options.stdio and type(options.stdio) == "table" and options.stdio.stdin then
+	local stdio = if options and options.stdio and type(options.stdio) == "table" then options.stdio else nil
+	if options and stdio then
 		local ok, result = pcall(zune.process.create, program, params, if options then {
 			cwd = options.cwd,
 			env = options.env,
 			shell = options.shell,
-			stdio = "pipe",
+			stdin = "pipe",
+			stdout = if stdio.stdout then KIND_MAP[stdio.stdout] or "pipe" else nil,
+			stderr = if stdio.stderr then KIND_MAP[stdio.stderr] or "pipe" else nil,
 		} else nil)
 		if not ok then
 			if result == "FileNotFound" then
 				error("No such file or directory (os error 2)", 0)
 			end
 		end
-		result.stdin:write(options.stdio.stdin)
+		local status
+		local stdout = result.stdout
+		local stderr = result.stderr
+		if stdio.stdout == "forward" then
+			zune.task.spawn(function()
+				while not status do
+					local chunk = result.stdout:read(1_073_741_824)
+					if #chunk == 0 then
+						break
+					end
+					zune.io.stdout:write(chunk)
+				end
+			end)
+			stdout = nil
+		end
+		if stdio.stderr == "forward" then
+			zune.task.spawn(function()
+				while not status do
+					local chunk = result.stdout:read(1_073_741_824)
+					if #chunk == 0 then
+						break
+					end
+					zune.io.stderr:write(chunk)
+				end
+			end)
+			stderr = nil
+		end
+		result.stdin:write(stdio.stdin)
 		local timeout = zune.task.delay(2, function()
-			result:kill()
+			status = result:kill()
 		end)
-		local status = result:wait()
+		status = result:wait()
 		zune.task.cancel(timeout)
 		return {
 			ok = status.ok,
 			code = status.code,
-			stdout = result.stdout:read(1_073_741_824),
-			stderr = result.stderr:read(1_073_741_824),
+			stdout = if stdout then stdout:read(1_073_741_824) else nil,
+			stderr = if stderr then stderr:read(1_073_741_824) else nil,
 		}
 	end
 	local ok, result = pcall(zune.process.run, program, params, if options then {
 		cwd = options.cwd,
 		env = options.env,
 		shell = options.shell,
-		stdio = if options.stdio then KIND_MAP[options.stdio] or "pipe" else nil,
+		stdin = if options.stdio then KIND_MAP[options.stdio] or "pipe" else nil,
+		stdout = if options.stdio then KIND_MAP[options.stdio] or "pipe" else nil,
+		stderr = if options.stdio then KIND_MAP[options.stdio] or "pipe" else nil,
 	} else nil)
 	if not ok then
 		if result == "FileNotFound" then
