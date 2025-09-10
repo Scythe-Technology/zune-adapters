@@ -80,7 +80,7 @@ export type FetchResponse = {
 ]=]
 export type ServeRequest = {
 	path: string,
-	query: { [string]: string? },
+	query: HttpQueryMap,
 	method: HttpMethod,
 	headers: { [string]: string },
 	body: string,
@@ -616,6 +616,64 @@ local function addressToIp(address: string?): string?
 		return address
 	end
 end
+
+local function parseQueryStringFromUrl(url: string): HttpQueryMap
+	local query_start = url:find("?", 1, true)
+	if not query_start then
+		return {}
+	end
+	local query_string = url:sub(query_start + 1)
+	local query: { [string]: string | {string} } = {}
+	for pair in string.gmatch(query_string, "([^&]+)") do
+		local eq_pos = pair:find("=", 1, true)
+		if eq_pos then
+			local key = pair:sub(1, eq_pos - 1)
+			local value = pair:sub(eq_pos + 1)
+			key = net.urlDecode(key)
+			value = net.urlDecode(value)
+			local existing = query[key];
+			if existing then
+				if type(existing) == "string" then
+					query[key] = { existing, value }
+				else
+					table.insert(existing, value)
+				end
+			else
+				query[key] = value
+			end
+		else
+			local key = net.urlDecode(pair)
+			if not query[key] then
+				query[key] = ""
+			end
+		end
+	end
+	return query
+end
+
+local function wrapRequestHandle(handler: ServeHttpHandler?)
+	if not handler then
+		return nil
+	end
+	return function(request: HttpServerRequest)
+		local res = handler({
+			path = request.path,
+			query = parseQueryStringFromUrl(request.raw_path),
+			method = request.method,
+			headers = request.headers or {},
+			body = request.body or "",
+		})
+		if type(res) == "string" then
+			return res
+		end
+		return {
+			status_code = res.status or 200,
+			headers = res.headers or {},
+			body = res.body or "",
+		}
+	end
+end
+
 --[=[
 	@within Net
 
@@ -637,7 +695,7 @@ function net.serve(port: number, handlerOrConfig: ServeHttpHandler | ServeConfig
 		port = port,
 		reuse_address = true,
 		address = if type(handlerOrConfig) ~= "function" then addressToIp(handlerOrConfig.address) else nil,
-		request = if type(handlerOrConfig) == "function" then handlerOrConfig else handlerOrConfig.handleRequest,
+		request = if type(handlerOrConfig) == "function" then wrapRequestHandle(handlerOrConfig) else wrapRequestHandle(handlerOrConfig.handleRequest),
 		websocket = if type(handlerOrConfig) ~= "function" and handlerOrConfig.handleWebSocket then createWebSocketHandler(handlerOrConfig.handleWebSocket) else nil,
 	})
 	local stopped = false
