@@ -115,7 +115,14 @@ local fs = {}
 	@return The contents of the file
 ]=]
 function fs.readFile(path: string): string
-	return zune.fs.readFile(path)
+	local ok, result = pcall(zune.fs.readFile, path)
+	if not ok then
+		if result == "FileNotFound" then
+			error("No such file or directory (os error 2)", 0)
+		end
+		error(result)
+	end
+	return result
 end
 
 --[=[
@@ -134,9 +141,15 @@ end
 	@return A list of files & directories found
 ]=]
 function fs.readDir(path: string): { string }
-	local results = zune.fs.entries(path)
-	local copy = table.create(#results)
-	for i, entry in results do
+	local ok, result = pcall(zune.fs.entries, path)
+	if not ok then
+		if result == "FileNotFound" then
+			error("No such file or directory (os error 2)", 0)
+		end
+		error(result)
+	end
+	local copy = table.create(#result)
+	for i, entry in result do
 		copy[i] = entry.name
 	end
 	return copy
@@ -191,7 +204,13 @@ end
 	@param path The file to remove
 ]=]
 function fs.removeFile(path: string)
-	zune.fs.deleteFile(path)
+	local ok, err = pcall(zune.fs.deleteFile, path)
+	if not ok then
+		if err == "FileNotFound" then
+			error("No such file or directory (os error 2)", 0)
+		end
+		error(err)
+	end
 end
 
 --[=[
@@ -208,7 +227,13 @@ end
 	@param path The directory to remove
 ]=]
 function fs.removeDir(path: string)
-	zune.fs.deleteDir(path, true)
+	local ok, err = pcall(zune.fs.deleteDir, path, true)
+	if not ok then
+		if err == "FileNotFound" then
+			error("No such file or directory (os error 2)", 0)
+		end
+		error(err)
+	end
 end
 
 --[=[
