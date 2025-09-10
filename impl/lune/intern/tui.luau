@@ -84,7 +84,8 @@ local function prompt(
         io.stderr:write(moveToColumn(0))
         order = 1
     elseif kind == "confirm" then
-        io.stderr:write(` {style("dim", "(y/n)")} › `)
+        io.stderr:write(` {style("dim", "(y/n)")} › {color("cyan", "yes")}`)
+        input = "yes"
     elseif kind == "text" then
         io.stderr:write(" › ")
     end
