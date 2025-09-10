@@ -411,7 +411,16 @@ end
 	@return A dictionary representing the result of the child process
 ]=]
 function process.exec(program: string, params: { string }?, options: ExecOptions?): ExecResult
-	local stdio = if options and options.stdio and type(options.stdio) == "table" then options.stdio else nil
+	local stdio = if options and options.stdio then options.stdio else nil
+	if stdio == "forward" then
+		stdio = {
+			stdout = "forward",
+			stderr = "forward",
+		}
+	end
+	if type(stdio) ~= "table" then
+		stdio = nil
+	end
 	if options and stdio then
 		local ok, result = pcall(zune.process.create, program, params, if options then {
 			cwd = options.cwd,
