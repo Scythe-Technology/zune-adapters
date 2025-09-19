@@ -6,7 +6,7 @@
 ```json
 {
     "aliases": {
-        "lune": "path/to/./impl/lune",
+        "lune": "path/to/./impl/lune/runtime",
         ...
     }
 }
@@ -45,5 +45,5 @@ Extra unexpected features can occur in this adapter, such as extra compression f
 | regex | ✅ | |
 | serde | ✅ | |
 | process | ✅ | |
-| roblox | ❌️ | WIP, [luau-roblox](https://github.com/Scythe-Technology/luau-roblox) can be used here (no XML) |
+| roblox | ❌️ | WIP, [luau-roblox](https://github.com/Scythe-Technology/luau-roblox) can be used here |
 | datetime | ✅ | |
