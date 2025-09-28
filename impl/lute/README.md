@@ -36,7 +36,7 @@ Extra unexpected features can occur in this adapter, such as extra compression f
 | fs | ✅ | |
 | vm | ✅ | |
 | luau | ✅ | |
-| net | `75%` (1.5/2) | unsupported `tls` option for `net.serve` |
+| net | `92.5%` (1.85/2) | unsupported `tls.passphrase` or `tls.cafilename` option for `net.serve` |
 | crypto | ✅ | |
 | system | `87.5%` (7/8) | missing `cpus`/`cpuinfo` |
 | time | ✅ | |

@@ -60,13 +60,16 @@ function net.serve(config: Handler | Configuration)
 			}
 		else
 			config
-	if (config.tls) then
-		error("TLS is not implemented")
+	if (config.tls and (config.tls.passphrase or config.tls.cafilename)) then
+		error("TLS option 'passphrase' or 'cafilename' is not implemented")
 	end
 	zune.net.http.serve({
 		port = config.port or 3000,
 		address = config.hostname or "0.0.0.0",
 		reuse_address = config.reuseport,
+		tls = if (config.tls) then {
+			auth = zune.crypto.tls.keyPairFromFile(config.tls.certfilename, config.tls.keyfilename),
+		} else nil,
 		request = function(req)
 			local response = config.handler({
 				method = req.method,

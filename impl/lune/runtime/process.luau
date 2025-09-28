@@ -295,7 +295,7 @@ table.remove(process.args, 1)
 	The current working directory in which the Lune script is running.
 ]=]
 process.cwd = zune.process.cwd() :: string
-if zune.mem.lastIndexOfAny(process.cwd, "/\\") ~= #process.cwd then
+if zune.mem.findAnyLast(process.cwd, "/\\") ~= #process.cwd then
 	process.cwd ..= (if zune.platform.os == "windows" then "\\" else "/")
 end
 
