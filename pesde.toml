@@ -1,0 +1,14 @@
+name = "scythe_technology/zune_adapters"
+version = "0.0.1"
+description = "Runtime compatibility layer to run with zune"
+authors = ["Scythe Technology"]
+repository = "https://github.com/Scythe-Technology/zune-adapters"
+license = "MIT"
+private = true
+
+[target]
+environment = "luau"
+lib = "impl"
+
+[indices]
+default = "https://github.com/pesde-pkg/index"
